@@ -1,7 +1,16 @@
-import { Container, VStack, Heading, Text, Box, Image, HStack, IconButton } from "@chakra-ui/react";
+import { Container, VStack, Heading, Text, Box, Image, HStack, IconButton, Button } from "@chakra-ui/react";
 import { FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Index = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
+    setPosts(storedPosts);
+  }, []);
+
   return (
     <Container centerContent maxW="container.md" py={10}>
       <VStack spacing={8} align="stretch">
@@ -12,17 +21,18 @@ const Index = () => {
         <Box>
           <Image src="/images/blog-banner.jpg" alt="Blog Banner" borderRadius="md" />
         </Box>
+        <Box textAlign="center">
+          <Button as={Link} to="/new-post" colorScheme="teal" mb={4}>Create New Post</Button>
+        </Box>
         <Box>
           <Heading as="h2" size="lg" mb={4}>Latest Posts</Heading>
           <VStack spacing={4} align="stretch">
-            <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
-              <Heading fontSize="xl">Understanding React Hooks</Heading>
-              <Text mt={4}>A deep dive into the world of React Hooks and how they can simplify your code.</Text>
-            </Box>
-            <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
-              <Heading fontSize="xl">JavaScript ES2021 Features</Heading>
-              <Text mt={4}>An overview of the latest features introduced in JavaScript ES2021.</Text>
-            </Box>
+            {posts.map((post, index) => (
+              <Box key={index} p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                <Heading fontSize="xl">{post.title}</Heading>
+                <Text mt={4}>{post.content}</Text>
+              </Box>
+            ))}
           </VStack>
         </Box>
         <Box textAlign="center">
