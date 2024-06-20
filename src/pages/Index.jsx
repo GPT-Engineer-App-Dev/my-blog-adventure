@@ -1,11 +1,17 @@
 import { Container, VStack, Heading, Text, Box, Image, HStack, IconButton, Button, useColorMode } from "@chakra-ui/react";
-import { FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
+import { FaTwitter, FaLinkedin, FaGithub, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const Index = () => {
   const [posts, setPosts] = useState([]);
   const { colorMode } = useColorMode();
+
+  const handleDelete = (index) => {
+    const updatedPosts = posts.filter((_, i) => i !== index);
+    setPosts(updatedPosts);
+    localStorage.setItem("posts", JSON.stringify(updatedPosts));
+  };
 
   useEffect(() => {
     const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
@@ -30,7 +36,15 @@ const Index = () => {
           <VStack spacing={4} align="stretch">
             {posts.map((post, index) => (
               <Box key={index} p={5} shadow="md" borderWidth="1px" borderRadius="md" bg={colorMode === "dark" ? "gray.700" : "gray.100"}>
-                <Heading fontSize="xl">{post.title}</Heading>
+                <HStack justify="space-between">
+                  <Heading fontSize="xl">{post.title}</Heading>
+                  <IconButton
+                    aria-label="Delete post"
+                    icon={<FaTrash />}
+                    onClick={() => handleDelete(index)}
+                    colorScheme="red"
+                  />
+                </HStack>
                 <Text mt={4}>{post.content}</Text>
               </Box>
             ))}
