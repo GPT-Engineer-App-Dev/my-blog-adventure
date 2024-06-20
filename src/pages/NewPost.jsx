@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Container, VStack, Heading, Input, Textarea, Button, Box } from "@chakra-ui/react";
+import { Container, VStack, Heading, Input, Textarea, Button, Box, useColorMode } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 const NewPost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const navigate = useNavigate();
+  const { colorMode } = useColorMode();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,7 +17,7 @@ const NewPost = () => {
   };
 
   return (
-    <Container centerContent maxW="container.md" py={10}>
+    <Container centerContent maxW="container.md" py={10} bg={colorMode === "dark" ? "gray.800" : "white"} color={colorMode === "dark" ? "white" : "black"}>
       <VStack spacing={8} align="stretch">
         <Box textAlign="center">
           <Heading as="h1" size="2xl" mb={4}>Create New Post</Heading>
@@ -28,12 +29,14 @@ const NewPost = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+            bg={colorMode === "dark" ? "gray.700" : "gray.100"}
             />
             <Textarea
               placeholder="Content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               required
+            bg={colorMode === "dark" ? "gray.700" : "gray.100"}
             />
             <Button type="submit" colorScheme="blue" width="100%">Submit</Button>
           </VStack>
